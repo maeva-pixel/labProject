@@ -1,0 +1,48 @@
+frontend:
+        build: .
+        dockerfile: frontendDockerfile
+        command: node ./frontend.js
+        environment:
+                - ADRESS_FRONTEND=tcp://0.0.0.0:8000
+                - ADRESS_FRONTEND1=tcp://queue:8001
+                - ADRESS_FRONTEND2=tcp://queue:8002
+                - ADRESS_FRONTEND3=tcp://queue:8003
+        ports:
+                - "5000:8000"
+                - "8001"
+                - "8002"
+                - "8003"
+        links:
+                - "queue"
+              
+
+queue:
+        build: .
+        dockerfile: queueDockerfile
+        command: node ./queue.js
+        environment:
+                - ADRESS_QUEUE1=tcp://*:8001
+                - ADRESS_QUEUE2=tcp://*:8002
+                - ADRESS_QUEUE3=tcp://*:8003
+                - ADRESS_QUEUE4=tcp://worker:8004
+                - ADRESS_QUEUE5=tcp://worker:8005
+        ports:
+                - "8001"
+                - "8002"
+                - "8003"
+                - "8004"
+                - "8005"
+        links:
+             
+                - "worker"
+worker:
+        build: .
+        dockerfile: workerDockerfile
+        command : node ./worker.js
+        environment:
+                - ADRESS_WORKER=tcp://*:8004
+                - ADRESS_WORKER2=tcp://*:8005
+        ports :
+                - "8004"
+                - "8005"
+        

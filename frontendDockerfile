@@ -1,0 +1,11 @@
+FROM node:14
+ 
+WORKDIR ./
+RUN npm install express
+RUN npm install zeromq@5
+EXPOSE 8000
+EXPOSE 8001
+EXPOSE 8002
+EXPOSE 8003
+COPY . .
+CMD [ "node", "frontend.js" ]
